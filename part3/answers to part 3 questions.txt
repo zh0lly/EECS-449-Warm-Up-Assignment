@@ -1,0 +1,5 @@
+Explain what the state represents and how it can be used in the chatbot.:
+I think my users might get a bit frustrated using my bot, because I was only able to run the really small and crappy models on my computer. So, I added an emotional support state for emotional support related requests, so the chatbot can also console the user. The state represents a frustrated query or request for emotional consolation.
+
+Explain how the chatbot will route the user query to your custom chat model based on the classification.
+The request first gets classified by the llm, and then this classification is used to give the chatbot a prompt that targets a certain purpose, such as giving context documents or consoling an unsatisfied user.

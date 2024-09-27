@@ -2,11 +2,12 @@ import:py from mtllm.llms {Ollama}
 
 # glob llm = Ollama(model_name='llama3.1');
 glob llm = Ollama(model_name='qwen2:0.5b');
+# glob llm = Ollama(model_name='tinyllama');
 
 enum ChatType {
     RAG : 'Need to use Retrievable information in specific documents to respond' = "RAG",
     QA : 'Given context is enough for an answer' = "user_qa",
-    ES : 'Requests emotional consolation' = "user_es"
+    ES : 'Frustrated tone or requests emotional consolation' = "user_es"
 }
 
 import:jac from rag {RagEngine}
@@ -33,8 +34,21 @@ walker infer {
 
         can route with Router entry {
         classification = here.classify(message = self.message);
-        print(classification)
-        visit [-->](`?Chat)(?chat_type==classification);
+        if classification == ChatType.RAG {
+            print("rag");
+            visit [-->](`?RagChat);
+        } 
+        elif classification == ChatType.QA {
+            print("qa");
+            visit [-->](`?QAChat);
+        } 
+        elif classification == ChatType.ES {
+            print("esS");
+            visit [-->](`?ESChat); 
+        } 
+        else {
+            print("uh oh!!!!!");
+        }
     }
 }
 

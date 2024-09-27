@@ -47,8 +47,20 @@ class infer(_Jac.Walker):
 
     def route(self, _jac_here_: Router) -> None:
         classification = _jac_here_.classify(message=self.message)
-        if _Jac.visit_node(self, (lambda x: [i for i in x if i.chat_type == classification])((lambda x: [i for i in x if isinstance(i, Chat)])(_Jac.edge_ref(_jac_here_, target_obj=None, dir=_Jac.EdgeDir.OUT, filter_func=None, edges_only=False)))):
-            pass
+        if classification == ChatType.RAG:
+            print('Routing to RagChat')
+            if _Jac.visit_node(self, (lambda x: [i for i in x if isinstance(i, RagChat)])(_Jac.edge_ref(_jac_here_, target_obj=None, dir=_Jac.EdgeDir.OUT, filter_func=None, edges_only=False))):
+                pass
+        elif classification == ChatType.QA:
+            print('Routing to QAChat')
+            if _Jac.visit_node(self, (lambda x: [i for i in x if isinstance(i, QAChat)])(_Jac.edge_ref(_jac_here_, target_obj=None, dir=_Jac.EdgeDir.OUT, filter_func=None, edges_only=False))):
+                pass
+        elif classification == ChatType.ES:
+            print('Routing to ES')
+            if _Jac.visit_node(self, (lambda x: [i for i in x if isinstance(i, ESChat)])(_Jac.edge_ref(_jac_here_, target_obj=None, dir=_Jac.EdgeDir.OUT, filter_func=None, edges_only=False))):
+                pass
+        else:
+            print('Uh oh!!!!!')
 
 @_Jac.make_walker(on_entry=[_Jac.DSFunc('init_session', _Jac.RootType)], on_exit=[])
 @__jac_dataclass__(eq=False)
